@@ -90,19 +90,21 @@
     </header>
     <main>
         <section>
-            <h2>Solution</h2>
-            <p>To solve the technical issue, we implemented a dynamic and interactive user interface using Flutter. Here are the core features of the solution:</p>
+            <h2>Overview</h2>
+            <p>
+                This project demonstrates a dynamic and interactive drag-and-drop interface implemented using Flutter. 
+                The solution was designed to be intuitive, scalable, and user-friendly.
+            </p>
             <ul>
                 <li>Draggable buttons for rearranging items dynamically.</li>
                 <li>Animated scaling effects for better user feedback during hover and drag events.</li>
-                <li>Drop behavior to rearrange icons in real-time.</li>
+                <li>Real-time drop behavior to rearrange items visually.</li>
             </ul>
         </section>
         <section>
-            <h2>Code Snippet</h2>
-            <p>Below is a key part of the implementation, focusing on the draggable functionality and animations:</p>
-            <pre>
-<code>
+            <h2>Key Code Snippets</h2>
+            <p>The following snippet highlights the main entry point of the Flutter application:</p>
+            <pre><code>
 // Entry point of the application
 void main() {
   runApp(const MyApp());
@@ -144,13 +146,73 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-            </code>
-            </pre>
-            <p>This snippet highlights how animations and constraints were combined to create an intuitive drag-and-drop interface.</p>
+            </code></pre>
+            <p>The drag-and-drop functionality is implemented as follows:</p>
+            <pre><code>
+@override
+Widget build(BuildContext context) {
+  return Container(
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(8),
+      color: Colors.black12,
+    ),
+    padding: const EdgeInsets.all(4),
+    child: Row(
+      mainAxisSize: MainAxisSize.min,
+      children: List.generate(_items.length, (index) {
+        final item = _items[index];
+        return DragTarget<T>(
+          onWillAcceptWithDetails: (details) {
+            setState(() {
+              _draggingIndex = index;
+            });
+            return true;
+          },
+          onAcceptWithDetails: (details) {
+            setState(() {
+              final oldIndex = _items.indexOf(details.data);
+              _items.removeAt(oldIndex);
+              _items.insert(index, details.data);
+              _draggingIndex = null;
+            });
+          },
+          onLeave: (_) {
+            setState(() {
+              _draggingIndex = null;
+            });
+          },
+          builder: (context, candidateData, rejectedData) {
+            final isHovered = _draggingIndex == index;
+            return Draggable<T>(
+              data: item,
+              feedback: Material(
+                color: Colors.transparent,
+                child: widget.builder(item, false, true),
+              ),
+              childWhenDragging: const SizedBox.shrink(),
+              onDragStarted: () {
+                setState(() {
+                  _draggingIndex = index;
+                });
+              },
+              onDragEnd: (_) {
+                setState(() {
+                  _draggingIndex = null;
+                });
+              },
+              child: widget.builder(item, isHovered, false),
+            );
+          },
+        );
+      }),
+    ),
+  );
+}
+            </code></pre>
         </section>
     </main>
     <footer>
-        <p>Created by <a href="https://github.com/your-username" target="_blank">Your Name</a></p>
+        <p>Created by <a href="https://github.com/EduardRios" target="_blank">Eduardo Rios</a></p>
     </footer>
 </body>
 </html>
