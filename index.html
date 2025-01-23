@@ -50,6 +50,22 @@
             margin-bottom: 1rem;
         }
 
+        pre {
+            background: #f4f4f4;
+            padding: 1rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: #333;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        code {
+            font-family: "Courier New", Courier, monospace;
+            color: #d63384;
+        }
+
         footer {
             text-align: center;
             padding: 1rem 0;
@@ -75,15 +91,62 @@
     <main>
         <section>
             <h2>Solution</h2>
-            <p>To address the technical issue, we implemented the following steps:</p>
+            <p>To solve the technical issue, we implemented a dynamic and interactive user interface using Flutter. Here are the core features of the solution:</p>
             <ul>
-                <li>Redesigned the layout to ensure consistency across all elements, particularly for draggable buttons.</li>
-                <li>Added smooth scaling animations to enhance visual feedback when hovering or dragging.</li>
-                <li>Implemented responsive drag-and-drop functionality, allowing users to rearrange elements seamlessly.</li>
-                <li>Applied constraints to maintain alignment and prevent misplacement during interactions.</li>
-                <li>Tested holaaaa and optimized the performance to ensure smooth operation, even with high-frequency interactions.</li>
+                <li>Draggable buttons for rearranging items dynamically.</li>
+                <li>Animated scaling effects for better user feedback during hover and drag events.</li>
+                <li>Drop behavior to rearrange icons in real-time.</li>
             </ul>
-            <p>The solution not only resolved the initial issue but also improved the user experience, making the interface more dynamic and intuitive.</p>
+        </section>
+        <section>
+            <h2>Code Snippet</h2>
+            <p>Below is a key part of the implementation, focusing on the draggable functionality and animations:</p>
+            <pre>
+<code>
+// Entry point of the application
+void main() {
+  runApp(const MyApp());
+}
+
+// Stateless Widget for the main structure
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        body: Center(
+          child: Dock(
+            items: const [
+              Icons.person,
+              Icons.message,
+              Icons.call,
+              Icons.camera,
+              Icons.photo,
+            ],
+            builder: (e, isHovered, isDragging) {
+              double scale = isDragging ? 1.5 : (isHovered ? 1.2 : 1.0);
+              return AnimatedContainer(
+                duration: const Duration(milliseconds: 200),
+                transform: Matrix4.identity()..scale(scale),
+                constraints: const BoxConstraints(minWidth: 48, minHeight: 48, maxHeight: 48),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8),
+                  color: Colors.primaries[e.hashCode % Colors.primaries.length],
+                ),
+                child: Center(child: Icon(e, color: Colors.white)),
+              );
+            },
+          ),
+        ),
+      ),
+    );
+  }
+}
+            </code>
+            </pre>
+            <p>This snippet highlights how animations and constraints were combined to create an intuitive drag-and-drop interface.</p>
         </section>
     </main>
     <footer>
